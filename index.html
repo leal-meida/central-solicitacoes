@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Central de Solicitações</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f1f3;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.card {
+  background: white; border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.10);
+  max-width: 480px; width: 100%;
+  overflow: hidden;
+}
+.hero {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  padding: 2rem; color: white; text-align: center;
+}
+.logo {
+  width: 52px; height: 52px; background: rgba(255,255,255,.2);
+  border-radius: 14px; display: flex; align-items: center;
+  justify-content: center; font-size: 26px; margin: 0 auto 1rem;
+}
+.hero h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+.hero p  { font-size: 13px; opacity: .85; line-height: 1.5; }
+.body { padding: 2rem; display: flex; flex-direction: column; gap: 12px; }
+.link-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px; border-radius: 10px;
+  text-decoration: none; transition: all .15s;
+  border: 1.5px solid #e4e6ea;
+}
+.link-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.10); }
+.link-btn.primary { background: #2563eb; border-color: #2563eb; color: white; }
+.link-btn.secondary { background: white; color: #111318; }
+.link-icon { font-size: 24px; flex-shrink: 0; }
+.link-label { font-size: 14px; font-weight: 600; }
+.link-desc  { font-size: 12px; opacity: .7; margin-top: 2px; }
+.footer { padding: 1rem 2rem; border-top: 1px solid #e4e6ea; text-align: center; font-size: 11px; color: #9ca3af; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hero">
+    <div class="logo">🎫</div>
+    <h1>Central de Solicitações</h1>
+    <p>Comprovantes & Reembolsos</p>
+  </div>
+  <div class="body">
+    <a class="link-btn primary" href="formulario.html">
+      <span class="link-icon">📝</span>
+      <div>
+        <div class="link-label">Abrir solicitação</div>
+        <div class="link-desc">Preencha o formulário para comprovante ou reembolso</div>
+      </div>
+    </a>
+    <a class="link-btn secondary" href="kanban.html">
+      <span class="link-icon">📋</span>
+      <div>
+        <div class="link-label">Painel de tickets</div>
+        <div class="link-desc">Acesso restrito — acompanhe e gerencie as solicitações</div>
+      </div>
+    </a>
+  </div>
+  <div class="footer">Central de Solicitações · EBANX</div>
+</div>
+</body>
+</html>
