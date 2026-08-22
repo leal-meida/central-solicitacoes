@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Solicitar Comprovante ou Reembolso</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink:       #111318;
+  --ink2:      #3a3f4a;
+  --ink3:      #6b7280;
+  --fog:       #f0f1f3;
+  --fog2:      #e4e6ea;
+  --white:     #ffffff;
+  --blue:      #2563eb;
+  --blue-l:    #eff4ff;
+  --blue-b:    #bfcffd;
+  --teal:      #0891b2;
+  --teal-l:    #ecfeff;
+  --amber:     #d97706;
+  --amber-l:   #fffbeb;
+  --violet:    #7c3aed;
+  --violet-l:  #f5f3ff;
+  --green:     #16a34a;
+  --green-l:   #f0fdf4;
+  --green-b:   #bbf7d0;
+  --red:       #dc2626;
+  --red-l:     #fef2f2;
+  --r:         6px;
+  --r-lg:      12px;
+  --font:      'Inter', sans-serif;
+  --mono:      'JetBrains Mono', monospace;
+  --shadow:    0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: var(--font); background: var(--fog); color: var(--ink); min-height: 100vh; padding-bottom: 3rem; }
+
+.header {
+  background: var(--white);
+  border-bottom: 1px solid var(--fog2);
+  padding: 0 2rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+.logo {
+  width: 34px; height: 34px;
+  background: var(--blue);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 16px;
+  flex-shrink: 0;
+}
+.header h1 { font-size: 15px; font-weight: 600; }
+.header-sub { font-size: 12px; color: var(--ink3); }
+
+.form-wrap { max-width: 680px; margin: 0 auto; padding: 0 1.5rem; }
+
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--fog2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.form-hero {
+  background: linear-gradient(135deg, var(--blue) 0%, #1d4ed8 100%);
+  padding: 1.75rem 2rem;
+  color: white;
+}
+.form-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.form-hero p { font-size: 13px; opacity: .85; line-height: 1.5; }
+.form-body { padding: 2rem; }
+.form-section { margin-bottom: 1.75rem; }
+.form-section-title {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: var(--ink3); margin-bottom: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--fog2);
+  display: flex; align-items: center; gap: 6px;
+}
+.form-row { display: grid; gap: 12px; margin-bottom: 12px; }
+.form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+label { font-size: 12px; font-weight: 600; color: var(--ink2); }
+label .req { color: var(--red); margin-left: 2px; }
+label .opt { font-weight: 400; color: var(--ink3); font-size: 11px; margin-left: 4px; }
+input, select, textarea {
+  height: 38px; padding: 0 12px;
+  border: 1px solid var(--fog2); border-radius: var(--r);
+  background: var(--white); color: var(--ink);
+  font-size: 13px; font-family: var(--font);
+  transition: border-color .12s, box-shadow .12s; width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+textarea { height: 90px; padding: 10px 12px; resize: vertical; }
+.field-hint { font-size: 11px; color: var(--ink3); }
+
+.urgency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.urgency-opt {
+  border: 1.5px solid var(--fog2); border-radius: var(--r);
+  padding: 10px 12px; cursor: pointer;
+  text-align: center; transition: all .15s; user-select: none;
+}
+.urgency-opt:hover { border-color: var(--blue); }
+.urgency-opt input { display: none; }
+.urgency-opt .ulabel { font-size: 12px; font-weight: 600; display: block; margin-top: 4px; }
+.urgency-opt .udesc { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.urgency-opt.sel-normal { border-color: var(--teal); background: var(--teal-l); }
+.urgency-opt.sel-alta { border-color: var(--amber); background: var(--amber-l); }
+.urgency-opt.sel-critica { border-color: var(--red); background: var(--red-l); }
+
+.upload-zone {
+  border: 1.5px dashed var(--fog2); border-radius: var(--r);
+  padding: 1.25rem; text-align: center;
+  cursor: pointer; transition: all .15s; background: var(--fog);
+}
+.upload-zone:hover { border-color: var(--blue); background: var(--blue-l); }
+.upload-zone p { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+.upload-zone .up-icon { font-size: 24px; }
+
+.btn {
+  height: 40px; padding: 0 20px; border-radius: var(--r);
+  border: 1px solid var(--fog2); background: var(--white); color: var(--ink);
+  font-size: 13px; font-family: var(--font); font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+  transition: all .12s; white-space: nowrap;
+}
+.btn:hover { background: var(--fog); }
+.btn-primary { background: var(--blue); border-color: var(--blue); color: white; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-lg { height: 44px; font-size: 14px; width: 100%; justify-content: center; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Success screen */
+.success-screen {
+  display: none; text-align: center;
+  padding: 3rem 2rem;
+}
+.success-screen.show { display: block; }
+.success-icon { font-size: 56px; margin-bottom: 1rem; }
+.success-screen h2 { font-size: 20px; font-weight: 700; color: var(--green); margin-bottom: 8px; }
+.success-screen p { font-size: 14px; color: var(--ink3); line-height: 1.6; }
+.success-id {
+  display: inline-block; margin: 1rem 0;
+  background: var(--green-l); border: 1px solid var(--green-b);
+  border-radius: var(--r); padding: 8px 16px;
+  font-family: var(--mono); font-size: 15px;
+  font-weight: 600; color: var(--green);
+}
+
+/* Loading overlay */
+.loading-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(255,255,255,.7);
+  z-index: 500; align-items: center; justify-content: center;
+  font-size: 14px; color: var(--ink3);
+  flex-direction: column; gap: 12px;
+}
+.loading-overlay.show { display: flex; }
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--fog2);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Error banner */
+.error-banner {
+  display: none; background: var(--red-l); border: 1px solid #fca5a5;
+  border-radius: var(--r); padding: 12px 14px;
+  font-size: 13px; color: var(--red); margin-bottom: 1rem;
+}
+.error-banner.show { display: block; }
+
+@media (max-width: 600px) {
+  .form-row.cols-2, .form-row.cols-3 { grid-template-columns: 1fr; }
+  .urgency-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🎫</div>
+  <div>
+    <div class="header h1" style="font-size:15px;font-weight:600">Central de Solicitações</div>
+    <div class="header-sub">Comprovantes & Reembolsos</div>
+  </div>
+</div>
+
+<div class="form-wrap">
+  <div class="form-card">
+    <div class="form-hero">
+      <h2>Nova solicitação</h2>
+      <p>Preencha os campos abaixo. Campos com <strong>*</strong> são obrigatórios.<br/>
+      Tempo médio de resposta: 24h úteis para comprovantes, 48h para reembolsos.</p>
+    </div>
+
+    <!-- Success screen -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">✅</div>
+      <h2>Solicitação enviada!</h2>
+      <div class="success-id" id="success-id">RMB-2026-0000</div>
+      <p>Guarde esse número de protocolo.<br/>
+      Você receberá atualizações no e-mail informado.</p>
+      <button class="btn btn-primary" style="margin-top:1.5rem" onclick="novasolicitacao()">+ Nova solicitação</button>
+    </div>
+
+    <div class="form-body" id="form-body">
+      <div class="error-banner" id="error-banner"></div>
+
+      <div class="form-section">
+        <div class="form-section-title">🧾 Tipo de solicitação</div>
+        <div class="form-row cols-3">
+          <label class="urgency-opt sel-normal" id="opt-comp" onclick="selTipo('comp')">
+            <input type="radio" name="tipo" value="comp"/>
+            <span style="font-size:20px">📄</span>
+            <span class="ulabel">Comprovante</span>
+            <span class="udesc">de pagamento</span>
+          </label>
+          <label class="urgency-opt" id="opt-reimb" onclick="selTipo('reimb')">
+            <input type="radio" name="tipo" value="reimb"/>
+            <span style="font-size:20px">💰</span>
+            <span class="ulabel">Reembolso</span>
+            <span class="udesc">de transação</span>
+          </label>
+          <label class="urgency-opt" id="opt-both" onclick="selTipo('both')">
+            <input type="radio" name="tipo" value="both"/>
+            <span style="font-size:20px">📦</span>
+            <span class="ulabel">Ambos</span>
+            <span class="udesc">comprovante + reembolso</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">👤 Solicitante</div>
+        <div class="form-row cols-2">
+          <div class="field">
+            <label>Nome completo <span class="req">*</span></label>
+            <input type="text" id="f-nome" placeholder="Seu nome"/>
+          </div>
+          <div class="field">
+            <label>E-mail para retorno <span class="req">*</span></label>
+            <input type="email" id="f-email" placeholder="seu@ebanx.com"/>
+          </div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="field">
+            <label>Merchant / Empresa <span class="req">*</span></label>
+            <input type="text" id="f-merchant" placeholder="Nome do merchant"/>
+          </div>
+          <div class="field">
+            <label>País</label>
+            <select id="f-pais">
+              <option value="">Selecione</option>
+              <option>Brasil</option><option>México</option><option>Colombia</option>
+              <option>Peru</option><option>Chile</option><option>Argentina</option>
+              <option>Equador</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">💳 Dados da transação</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Payment ID(s) ou Refund ID(s) <span class="req">*</span></label>
+            <input type="text" id="f-ids" placeholder="Ex: 2995683128604, 3003944304904"/>
+            <span class="field-hint">Separe múltiplos IDs por vírgula</span>
+          </div>
+        </div>
+        <div class="form-row cols-3">
+          <div class="field">
+            <label>Valor <span class="opt">(opcional)</span></label>
+            <input type="text" id="f-valor" placeholder="0,00"/>
+          </div>
+          <div class="field">
+            <label>Moeda</label>
+            <select id="f-moeda">
+              <option value="">Selecione</option>
+              <option>BRL</option><option>MXN</option><option>COP</option>
+              <option>PEN</option><option>CLP</option><option>ARS</option><option>USD</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Data da transação</label>
+            <input type="date" id="f-data"/>
+          </div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="field">
+            <label>Número da remessa <span class="opt">(se aplicável)</span></label>
+            <input type="text" id="f-remessa" placeholder="Ex: 31448"/>
+          </div>
+          <div class="field">
+            <label>Adquirente / Operadora</label>
+            <select id="f-adq">
+              <option value="">Selecione</option>
+              <option>NIUBIZ</option><option>IZIPAY</option><option>BBVA</option>
+              <option>Santander</option><option>Cielo</option><option>Rede</option>
+              <option>Getnet</option><option>Outro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📝 Detalhes</div>
+        <div class="form-row">
+          <div class="field">
+            <label>Motivo da solicitação <span class="req">*</span></label>
+            <textarea id="f-motivo" placeholder="Descreva o contexto: o que aconteceu, por que precisa do comprovante/reembolso..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">⚡ Urgência</div>
+        <div class="urgency-grid">
+          <label class="urgency-opt" id="urg-normal" onclick="selUrg('normal')">
+            <input type="radio" name="urgencia" value="normal"/>
+            <span style="font-size:18px">🟢</span>
+            <span class="ulabel">Normal</span>
+            <span class="udesc">SLA 24–48h úteis</span>
+          </label>
+          <label class="urgency-opt" id="urg-alta" onclick="selUrg('alta')">
+            <input type="radio" name="urgencia" value="alta"/>
+            <span style="font-size:18px">🟡</span>
+            <span class="ulabel">Alta</span>
+            <span class="udesc">SLA 12h úteis</span>
+          </label>
+          <label class="urgency-opt" id="urg-critica" onclick="selUrg('critica')">
+            <input type="radio" name="urgencia" value="critica"/>
+            <span style="font-size:18px">🔴</span>
+            <span class="ulabel">Crítica</span>
+            <span class="udesc">Escalonamento imediato</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">📎 Anexos <span style="font-weight:400;color:var(--ink3)">(opcional)</span></div>
+        <div class="upload-zone" onclick="document.getElementById('f-files').click()">
+          <div class="up-icon">📁</div>
+          <p>Clique para anexar prints, e-mails ou documentos</p>
+          <p style="font-size:11px;margin-top:2px">PDF, PNG, JPG, XLSX — máx 10MB cada</p>
+          <input type="file" id="f-files" multiple style="display:none"/>
+        </div>
+        <div id="file-list" style="margin-top:8px"></div>
+        <p style="font-size:11px;color:var(--ink3);margin-top:6px">⚠️ Anexos são opcionais. O sistema registra os metadados; arquivos podem ser enviados por e-mail se necessário.</p>
+      </div>
+
+      <button class="btn btn-primary btn-lg" id="submit-btn" onclick="submitForm()">
+        Abrir solicitação →
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <span>Enviando solicitação...</span>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// ⚙️  CONFIGURAÇÃO — preencha com seus dados do Supabase
+// ─────────────────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://dubbhrgqandxrfrtebbh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1YmJocmdxYW5keHJmcnRlYmJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczNTQ0OTksImV4cCI6MjEwMjkzMDQ5OX0.LWQpMDQDODn2WCQstNg0bdUnvEN7SJ9Az2cxb0cCTxU';
+// ─────────────────────────────────────────────────────────────────────────────
+
+let selTipoVal = 'comp';
+let selUrgVal  = 'normal';
+
+function selTipo(v) {
+  selTipoVal = v;
+  const map = { comp: 'sel-normal', reimb: 'sel-alta', both: 'sel-critica' };
+  ['comp','reimb','both'].forEach(t => {
+    const el = document.getElementById('opt-' + t);
+    el.className = 'urgency-opt' + (t === v ? ' ' + map[t] : '');
+  });
+}
+
+function selUrg(v) {
+  selUrgVal = v;
+  ['normal','alta','critica'].forEach(u => {
+    const el = document.getElementById('urg-' + u);
+    el.className = 'urgency-opt' + (u === v ? ' sel-' + u : '');
+  });
+}
+
+document.getElementById('f-files').addEventListener('change', function() {
+  document.getElementById('file-list').innerHTML = [...this.files].map(f =>
+    `<div style="font-size:12px;color:var(--ink2);padding:4px 0;display:flex;align-items:center;gap:6px">
+      📎 ${f.name} <span style="color:var(--ink3)">(${(f.size/1024).toFixed(1)} KB)</span>
+    </div>`
+  ).join('');
+});
+
+function showError(msg) {
+  const el = document.getElementById('error-banner');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 5000);
+}
+
+async function gerarId() {
+  // Busca o último ticket para gerar o próximo ID sequencial
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/tickets?select=id&order=created_at.desc&limit=1`, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+    }
+  });
+  const data = await res.json();
+  if (data.length === 0) return 'RMB-2026-0001';
+  const last = data[0].id; // ex: RMB-2026-0042
+  const num = parseInt(last.split('-')[2]) + 1;
+  return `RMB-2026-${num.toString().padStart(4,'0')}`;
+}
+
+async function submitForm() {
+  const nome     = document.getElementById('f-nome').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const merchant = document.getElementById('f-merchant').value.trim();
+  const ids      = document.getElementById('f-ids').value.trim();
+  const motivo   = document.getElementById('f-motivo').value.trim();
+
+  if (!nome || !email || !merchant || !ids || !motivo) {
+    showError('⚠️ Preencha os campos obrigatórios: Nome, E-mail, Merchant, IDs e Motivo.');
+    return;
+  }
+
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('submit-btn').disabled = true;
+
+  try {
+    const ticketId = await gerarId();
+
+    const ticket = {
+      id:         ticketId,
+      tipo:       selTipoVal,
+      nome,
+      email,
+      merchant,
+      ids,
+      valor:      document.getElementById('f-valor').value.trim() || null,
+      moeda:      document.getElementById('f-moeda').value || null,
+      pais:       document.getElementById('f-pais').value || null,
+      data_transacao: document.getElementById('f-data').value || null,
+      remessa:    document.getElementById('f-remessa').value.trim() || null,
+      adq:        document.getElementById('f-adq').value || null,
+      motivo,
+      urgencia:   selUrgVal,
+      col:        'aberto',
+      history:    JSON.stringify([{ t: Date.now(), txt: `Ticket aberto por ${nome}` }])
+    };
+
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/tickets`, {
+      method: 'POST',
+      headers: {
+        'apikey':        SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type':  'application/json',
+        'Prefer':        'return=minimal'
+      },
+      body: JSON.stringify(ticket)
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+
+    // Sucesso
+    document.getElementById('success-id').textContent = ticketId;
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('success-screen').classList.add('show');
+
+  } catch (e) {
+    console.error(e);
+    showError('❌ Erro ao enviar. Verifique sua conexão ou tente novamente.');
+  } finally {
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('submit-btn').disabled = false;
+  }
+}
+
+function novasolicitacao() {
+  document.getElementById('success-screen').classList.remove('show');
+  document.getElementById('form-body').style.display = 'block';
+  ['f-nome','f-email','f-merchant','f-ids','f-valor','f-motivo','f-remessa'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  ['f-pais','f-moeda','f-adq'].forEach(id => {
+    document.getElementById(id).selectedIndex = 0;
+  });
+  document.getElementById('file-list').innerHTML = '';
+  document.getElementById('f-data').value = '';
+  selTipo('comp');
+  selUrg('normal');
+}
+
+// Init
+selTipo('comp');
+selUrg('normal');
+</script>
+</body>
+</html>
